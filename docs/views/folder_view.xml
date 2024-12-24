@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_docs_folder_tree" model="ir.ui.view">
+        <field name="name">docs.folder.tree</field>
+        <field name="model">docs.folder</field>
+        <field name="arch" type="xml">
+            <tree string="Folders">
+                <field name="name"/>
+                <field name="parent_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_docs_folder_form" model="ir.ui.view">
+        <field name="name">docs.folder.form</field>
+        <field name="model">docs.folder</field>
+        <field name="arch" type="xml">
+            <form string="Folder">
+                <group>
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    <field name="child_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="file_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

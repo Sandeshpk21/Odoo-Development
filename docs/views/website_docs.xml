@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu Item for Document Management -->
+    <record id="menu_document_management" model="website.menu">
+        <field name="name">Documents</field>
+        <field name="url">/documents</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">60</field>
+    </record>
+
+    <!-- Document Listing Page -->
+    <template id="document_listing_page" name="Document Listing Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1>Document Management</h1>
+                    <div class="breadcrumb">
+                        <a t-att-href="'/documents'">Main Directory</a>
+                        <t t-foreach="breadcrumb" t-as="crumb">
+                            <span> / </span>
+                            <a t-att-href="'/documents/folder/%s' % crumb.id">
+                                <t t-esc="crumb.name"/>
+                            </a>
+                        </t>
+                    </div>
+                    <div class="row">
+                        <!-- Display Folders -->
+                        <t t-foreach="folders" t-as="folder">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                <a t-att-href="'/documents/folder/%s' % folder.id" style="text-decoration: none; color: inherit;">
+                                    <div class="card text-center" style="cursor: pointer;">
+                                        <div class="card-body">
+                                            <i class="fa fa-folder fa-4x" style="color: #FFA500;"></i>
+                                            <h5 class="card-title mt-2"><t t-esc="folder.name"/></h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+
+                        <!-- Display Files -->
+                        <t t-foreach="files" t-as="file">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <i class="fa fa-file fa-4x" style="color: #007BFF;"></i>
+                                        <h5 class="card-title mt-2"><t t-esc="file.file_name"/></h5>
+                                        <a t-att-href="'/documents/download/%s' % file.id" class="btn btn-secondary">Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <!-- Upload Button -->
+                    <!-- <a href="/documents/upload" class="btn btn-primary mt-4">Upload New File</a> -->
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Folder Detail Page -->
+    <template id="folder_detail_page" name="Folder Detail Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1><t t-esc="folder.name"/></h1>
+                    <div class="breadcrumb">
+                        <a t-att-href="'/documents'">Main Directory</a>
+                        <t t-foreach="breadcrumb" t-as="crumb">
+                            <span> / </span>
+                            <a t-att-href="'/documents/folder/%s' % crumb.id">
+                                <t t-esc="crumb.name"/>
+                            </a>
+                        </t>
+                    </div>
+                    <div class="row">
+                        <!-- Display Subfolders -->
+                        <t t-foreach="subfolders" t-as="subfolder">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                <a t-att-href="'/documents/folder/%s' % subfolder.id" style="text-decoration: none; color: inherit;">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <i class="fa fa-folder fa-4x" style="color: #FFA500;"></i>
+                                            <h5 class="card-title mt-2"><t t-esc="subfolder.name"/></h5>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </t>
+
+                        <!-- Display Files -->
+                        <t t-foreach="files" t-as="file">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <i class="fa fa-file fa-4x" style="color: #007BFF;"></i>
+                                        <h5 class="card-title mt-2"><t t-esc="file.file_name"/></h5>
+                                        <a t-att-href="'/documents/download/%s' % file.id" class="btn btn-secondary">Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                    <!-- create folder button -->
+                    <a t-att-href="'/documents/createfolder/%s' % folder.id" class="btn btn-primary mt-4">Create New Folder</a>
+                    <!-- Upload Button --> 
+                    <a t-att-href="'/documents/upload/%s' % folder.id" class="btn btn-primary mt-4">Upload New File</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- File Upload Page -->
+    <template id="file_upload_page" name="File Upload Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1>Upload File</h1>
+                    <form action="/create_document" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="folder_id" t-att-value="folder_id"/>
+                        <div class="form-group">
+                            <label for="file">Select File:</label>
+                            <input type="file" id="file" name="file" class="form-control" required="required"/>
+                        </div>
+                        <button type="submit" class="btn btn-success">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Create Folder Page -->
+    <template id="create_folder_page" name="Create Folder Page">
+        <t t-call="website.layout">
+            <div class="container">
+                <h3>Create New Folder</h3>
+                <form action="/createnewfolder" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" name="folder_id" t-att-value="folder_id"/>
+                    <div class="form-group">
+                        <label for="folder_name">Folder Name:</label>
+                        <input type="text" name="folder_name" class="form-control" required="required" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,62 @@
+<!-- <odoo>
+
+    <record id="action_docs_folder" model="ir.actions.act_window">
+        <field name="name">Folders</field>
+        <field name="res_model">docs.folder</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_docs_main" model="ir.actions.act_window">
+        <field name="name">Files</field>
+        <field name="res_model">docs.main</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_docs_root" name="Custom_Documents" sequence="10"/>
+    <menuitem id="menu_docs_folders" name="Folders" parent="menu_docs_root" action="action_docs_folder" sequence="20"/>
+    <menuitem id="menu_docs_files" name="Files" parent="menu_docs_root" action="action_docs_main" sequence="30"/>
+</odoo> -->
+<odoo>
+    <record id="view_docs_main_tree" model="ir.ui.view">
+        <field name="name">docs.main.tree</field>
+        <field name="model">docs.main</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="file_name"/>
+                <field name="description"/>
+                <field name="author"/>
+                <field name="creation_date"/>
+                <field name="version"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Folder Form with Files -->
+    <record id="view_docs_folder_form" model="ir.ui.view">
+        <field name="name">docs.folder.form</field>
+        <field name="model">docs.folder</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="parent_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Subfolders">
+                            <field name="child_ids" context="{'default_parent_id': active_id}" mode="kanban"/>
+                        </page>
+                        <page string="Files">
+                            <field name="file_ids" context="{'default_folder_id': active_id}" mode="tree"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_docs_main" model="ir.actions.act_window">
+        <field name="name">Files</field>
+        <field name="res_model">docs.main</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

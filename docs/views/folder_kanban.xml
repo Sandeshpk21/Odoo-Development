@@ -1,0 +1,32 @@
+<odoo>
+    <!-- Folder Kanban View -->
+    <record id="view_docs_folder_kanban" model="ir.ui.view">
+        <field name="name">docs.folder.kanban</field>
+        <field name="model">docs.folder</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click o_kanban_record" style="padding: 30px;">
+                            <div class="o_kanban_image">
+                                <i class="fa fa-folder fa-3x" aria-hidden="true" style="color:#FFA500;"></i>
+                            </div>
+                            <div class="o_kanban_details"  style="font-size: 20px; font-weight: bold; padding: 10px 20px;">
+                                <strong><t t-esc="record.name.value"/></strong>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action for Folder Navigation -->
+    <record id="action_docs_folder_kanban" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">docs.folder</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'default_parent_id': False}</field>
+    </record>
+</odoo>

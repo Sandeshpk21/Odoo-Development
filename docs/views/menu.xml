@@ -1,0 +1,5 @@
+<odoo>
+    <menuitem id="menu_docs_root" name="Custom_Documents" sequence="10"/>
+    <menuitem id="menu_docs_folders" name="Folders" parent="menu_docs_root" action="action_docs_folder_kanban" sequence="20"/>
+    <menuitem id="menu_docs_files" name="Files" parent="menu_docs_root" action="action_docs_main" sequence="30"/>
+</odoo>
