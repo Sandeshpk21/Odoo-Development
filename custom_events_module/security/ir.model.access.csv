@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_event,custom_event_access,model_custom_event,,1,1,1,1
+access_custom_event_registration,custom_event_registration_access,model_custom_event_registration,,1,1,1,1
+access_custom_event_ticket,custom_event_ticket_access,model_custom_event_ticket,,1,1,1,1

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="menu_event_registration_from" model="website.menu">
+        <field name="name">events</field>
+        <field name="url">/custom_event_list</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">55</field>
+    </record>
+
+    <!-- Event Listing Page -->
+    <template id="event_listing_page" name="Event Listing Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1>Available Events</h1>
+                    <div class="row">
+                        <t t-foreach="events" t-as="event">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <!-- Wrap the event block (except the Register button) in an anchor tag -->
+                                <a t-att-href="'/custom_event_detail/%s' % event.id" class="event-link" style="text-decoration: none; color: inherit;">
+                                    <div class="card mb-4" style="cursor: pointer;">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><t t-esc="event.name"/></h5>
+                                            <p class="card-text"><t t-esc="event.description"/></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <!-- Register Button outside the link -->
+                                <a t-att-href="'/custom_event_registration/%s' % event.id" class="btn btn-primary">Register Now</a>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Event Detail Page -->
+    <template id="event_detail_page" name="Event Detail Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1><t t-esc="event.name"/></h1>
+                    
+                    <t t-if="event.event_image">
+                        <strong>Event Poster:</strong>
+                        <img t-attf-src="/web/image/custom.event/#{event.id}/event_image" alt="Event Poster" style="max-width: 100%; height: auto;" />
+                    </t>
+                    <p><strong>Description:</strong> <t t-esc="event.description"/></p>
+                    <p><strong>Start Date:</strong> <t t-esc="event.date_begin"/></p>
+                    <p><strong>End Date:</strong> <t t-esc="event.date_end"/></p>
+                    <p><strong>Location:</strong> <t t-esc="event.location"/></p>
+                    <p><strong>Organizer:</strong> <t t-esc="event.organizer_id.name"/></p>
+
+                    <!-- Register Button -->
+                    <a t-att-href="'/custom_event_registration/%s' % event.id" class="btn btn-primary">Register Now</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Payment Page -->
+    <template id="event_payment_page" name="Event Payment Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h1>Payment for <t t-esc="event.name"/></h1>
+                    <p>The ticket price is: <strong><t t-esc="ticket.price"/> INR</strong></p>
+                    <form action="/confirm_payment" method="post">
+                        <button type="submit" class="btn btn-success">Proceed with Payment</button>
+                        <input type="hidden" name="event_id" t-att-value="event.id"/>
+                        <input type="hidden" name="ticket_id" t-att-value="ticket.id"/>
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Registration form Page -->
+    <template id="event_website_registration" name="Event Website Registration">
+    <t t-call="website.layout">
+        <div id="wrap">
+            <div class="oe_structure">
+                <div class="container">
+                    <h1>Event Registration</h1>
+                    <form action="/create/registration" method="post">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 20px;">Register</button>
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="event_id" t-att-value="event.id"/>
+                        
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" t-att-value="name" required="required" 
+                            class="form-control" placeholder="Enter your name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" t-att-value="email"
+                            class="form-control" required="required"/>
+                        </div>
+
+                        <div>
+                            <label for="ticket_id">Ticket:</label>
+                            <select id="ticket_id" name="ticket_id" required="required" style="width: 50%; height: 30px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff;">
+                                <t t-foreach="tickets" t-as="ticket">
+                                    <!-- Ensure that only tickets related to this event are shown -->
+                                    <option t-att-value="ticket.id" style="padding: 5px; border: none; border-radius: 5px; background-color: #fff; color: #337ab7;">
+                                        <t t-esc="ticket.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </form>
+                </div>  
+            </div>
+        </div>
+    </t>
+    </template>
+
+
+    <record id="view_event_registration_thanks" model="website.page">
+        <field name="name">Thanks</field>
+        <field name="type">qweb</field>
+        <field name="url">/Registration-thank-you</field>
+        <field name="website_published">True</field>
+        <field name="key">custom_events_module.view_event_registration_thanks</field>
+        <field name="arch" type="xml">
+                <t name="Thanks" t-name="custom_events_module.view_event_registration_thanks">
+                    <t t-call="website.layout">
+                        <div id="wrap">
+                            <div class="container">
+                                <h1>Thanks!</h1>
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="alert alert-success" role="status">
+                                            Thank you for your registration.
+                                        </div>
+                                        Looking forward to see you there.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+        </field>
+    </record>
+
+</odoo>

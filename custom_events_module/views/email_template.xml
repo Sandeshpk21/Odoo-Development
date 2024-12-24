@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+        <record id="email_template_registration" model="mail.template">
+            <field name="name">Event Registration Confirmation</field>
+            <field name="model_id" ref="model_custom_event_registration"/>
+            <field name="subject">Event Registration Confirmation: ${object.event_id.name}</field>
+            <field name="email_from">${object.event_id.organizer_id.email or 'no-reply@example.com'}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Hello ${object.name or 'Guest'},</p>
+                    <p>Thank you for registering for the event <strong>${object.event_id.name}</strong>.</p>
+                    <p><strong>Event Name:</strong> ${object.event_id.name}</p>
+                    <p><strong>Date:</strong> ${object.event_id.date_begin.strftime('%B %d, %Y')} to ${object.event_id.date_end.strftime('%B %d, %Y')}</p>
+                    <p><strong>Location:</strong> ${object.event_id.location if object.event_id.location else 'Online'}</p>
+                    <p>We look forward to seeing you at the event.</p>
+                    <p>Thank you,</p>
+                    <p>${object.event_id.organizer_id.name or 'The Event Team'}</p>
+                ]]>
+            </field>
+        </record>
+
+        <record id="email_template_registration_cancellation" model='mail.template'>
+            <field name="name">Event Registration Cancellation</field>
+            <field name="model_id" ref="model_custom_event_registration"/>
+            <field name="subject">Event Registration Cancellation: ${object.event_id.name}</field>
+            <field name="email_from">${object.event_id.organizer_id.email or 'no-reply@example.com'}</field>
+            <field name="body_html">
+                <![CDATA[
+                    <p>Hello ${object.name or 'Guest'},</p>
+                    <p>We regret to inform you that your registration for the event <strong>${object.event_id.name}</strong> has been canceled.</p>
+                    <p><strong>Event Name:</strong> ${object.event_id.name}</p>
+                    <p><strong>Date:</strong> ${object.event_id.date_begin.strftime('%B %d, %Y')} to ${object.event_id.date_end.strftime('%B %d, %Y')}</p>
+                    <p><strong>Location:</strong> ${object.event_id.location if object.event_id.location else 'Online'}</p>
+                    <p>If you have any questions or need further assistance, feel free to contact us.</p>
+                    <p>Thank you,</p>
+                    <p>${object.event_id.organizer_id.name or 'The Event Team'}</p>
+                ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

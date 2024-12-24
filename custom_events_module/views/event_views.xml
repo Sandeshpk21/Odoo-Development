@@ -1,0 +1,122 @@
+<odoo>
+    <data>
+        <!-- Tree view of events -->
+        <record id="view_event_tree" model="ir.ui.view">
+            <field name="name">custom.event.tree</field>
+            <field name="model">custom.event</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date_begin"/>
+                    <field name="date_end"/>
+                    <field name="location"/>
+                    <field name="organizer_id"/>
+                    <field name="seats_available"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Kanban View of events -->
+        <record id="view_event_kanban" model="ir.ui.view">
+            <field name="name">custom.event.kanban</field>
+            <field name="model">custom.event</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card">
+                                <div class="oe_kanban_card_header">
+                                    <h4><field name="name"/></h4>
+                                </div>
+                                <div class="oe_kanban_card_body">
+                                    <field name="date_begin"/>
+                                    <field name="date_end"/>
+                                    <field name="location"/>
+                                    <field name="organizer_id"/>
+                                    <field name="seats_available"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                    <field name="name"/>
+                    <field name="date_begin"/>
+                    <field name="date_end"/>
+                    <field name="location"/>
+                    <field name="organizer_id"/>
+                    <field name="seats_available"/>
+                </kanban>
+            </field>
+        </record>
+
+
+        <!-- Form view of events with tickets -->
+        <record id="view_event_form" model="ir.ui.view">
+            <field name="name">custom.event.form</field>
+            <field name="model">custom.event</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <!-- Event Details -->
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="date_begin"/>
+                            <field name="date_end"/>
+                            <label for="is_online" string="Is event online"/>
+                            <div>
+                                <field name="is_online"/>
+                                <span invisible="not is_online" required="not is_online">
+                                    <strong>Online Link:</strong> <field name="online_link" class="oe_inline"/>
+                                </span>
+                                <span invisible="is_online" required="is_online">
+                                    <strong>Location:</strong> <field name="location" class="oe_inline"/>
+                                </span>
+                            </div>
+                            <field name="organizer_id"/>
+                            <field name="event_image" widget="image" />
+                            <!-- <field name="participants_user_ids" widget="many2many_tags"/> -->
+                            <!-- <label for="limit_participants" string="Limit Participants"/>
+                            <div>
+                                <field name="limit_participants"/>
+                                <span invisible="not limit_participants" required="not limit_participants">
+                                    <strong>to </strong>
+                                    <field name="seats_max" class="oe_inline"/>
+                                    <strong>Participants</strong>
+                                    <field name="seats_available"/>
+                                </span>
+                            </div>
+                            <field name="price"/> -->
+                        </group>
+
+                        <!-- Tickets Section -->
+                        <group string="Tickets">
+                            <field name="ticket_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="Ticket Type"/>
+                                    <field name="price" string="Ticket Price"/>
+                                    <field name="available_quantity" string="Available Tickets"/>
+                                    <field name="sold_quantity" string="Sold Tickets"/>
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group>
+                            <!-- Button for sending emails -->
+                            <button type="object" name="action_send_email_to_internal_user" string="Invite Participants" class="btn-primary"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for the events window -->
+        <record id="action_custom_event" model="ir.actions.act_window">
+            <field name="name">Custom Events</field>
+            <field name="res_model">custom.event</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <!-- Menu item for events -->
+        <menuitem id="menu_custom_events" name="Custom Events" action="action_custom_event" sequence="10"/>
+    </data>  
+</odoo>
