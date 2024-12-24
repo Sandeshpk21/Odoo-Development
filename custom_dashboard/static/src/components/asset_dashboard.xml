@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<templates xml:space="preserve"> 
+    <t t-name="custom_dashboard.AssetDashboard" owl="1">
+        <div class="o_content">
+            <div id="asset-dashboard" class="vh-100 overflow-auto bh-muted">
+                <button type="button" class="btn btn-light ms-3" onclick="window.print()" style="border: none; background-color: transparent; color: black;">
+                    <span class="fa fa-print"></span> Print Page
+                </button>  
+                <h1 style="background-color: orange; text-align: center; padding: 10px; color: white;">Asset Dashboard
+                </h1>            
+                <div class="row m-3">
+                    <!-- <div class="col-lg-7"> -->
+                        <div class="row">
+                            <KpiCard name="'Total Assets'" value="state.total_assets"/>
+                            <KpiCard name="'Managers'" value="state.manager_count"/>
+                            <KpiCard name="'Departments'" value="state.department_count"/>
+                        </div>
+                    <!-- </div> --> 
+                    <div t-key="state.refresh_key" class="row">
+                        <div class="col m-0 p-0">
+                            <div class="shadow-sm border m-2 p-4 bg-white">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h1 class="text-primary fw-bold">Custom Assets Dashboard</h1>
+                                    <div>
+                                        <p><b>Select Field</b></p>
+                                        <select class="form-select" t-model="state.fieldValue" t-on-change="onChangeValue">
+                                            <option value="status">Status</option>
+                                            <option value="name_id">Name</option>
+                                            <option value="department_id">Department</option>
+                                            <option value="manager">Manager</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <p><b>Graph Type</b></p>
+                                        <select class="form-select" t-model="state.graphType" t-on-change="onChangeGraphType"> 
+                                            <option value="bar">Bar</option>
+                                            <option value="pie">Pie</option>
+                                            <option value="doughnut">Doughnut</option>
+                                            <option value="line">Line</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ChartRender type="state.graphType" title="'Assets v/s ' + state.fieldValue" config="state.selectedFieldValues" /> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>                
+                    <!-- <div class="col-lg-5"> -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="shadow-sm border m-2 p-4 bg-white">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h3 class="text-primary fw-bold">Assets v/s Status</h3>
+                                        <div class="px-3 py-1 bg-primary cursor-pointer">
+                                            <span class="fa fa-arrow-right text-white"/> 
+                                        </div>
+                                    </div>
+                                    <ChartRender type="'doughnut'" title="'Assets v/s Status'" config="state.statusValues"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="shadow-sm border m-2 p-4 bg-white">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h3 class="text-primary fw-bold">Assets v/s Name</h3>
+                                        <div class="px-3 py-1 bg-primary cursor-pointer">
+                                            <span class="fa fa-arrow-right text-white"/> 
+                                        </div>
+                                    </div>
+                                    <ChartRender type="'pie'" title="'Assets v/s Name'" config="state.nameValues"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="shadow-sm border m-2 p-4 bg-white">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h3 class="text-primary fw-bold">Assets v/s Department</h3>
+                                        <div class="px-3 py-1 bg-primary cursor-pointer">
+                                            <span class="fa fa-arrow-right text-white"/> 
+                                        </div>
+                                    </div>
+                                    <ChartRender type="'pie'" title="'Assets v/s department'" config="state.deptValues"/>
+                                </div>  
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="shadow-sm border m-2 p-4 bg-white">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h3 class="text-primary fw-bold">Assets v/s Department</h3>
+                                        <div class="px-3 py-1 bg-primary cursor-pointer">
+                                            <span class="fa fa-arrow-right text-white"/> 
+                                        </div>
+                                    </div>
+                                    <ChartRender type="'pie'" title="'Assets v/s department'" config="state.deptValues"/>
+                                </div>  
+                            </div>
+                        </div>  
+                    <!-- </div>   -->
+                    <div class="row">
+                        <div class="col m-0 p-0">
+                            <div class="shadow-sm border m-2 p-4 bg-white">
+                                <h3 class="text-primary fw-bold">Assets</h3>
+                                <div class="asset_list_container" style="height: 500px; overflow-y: auto;">
+                                    <t t-view="asset.management.asset"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1>end</h1>                            
+            </div> 
+        </div>
+    </t>
+</templates>
